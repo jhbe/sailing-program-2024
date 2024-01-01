@@ -14,7 +14,7 @@ func (p *Pros) Next() (name string) {
 	return
 }
 
-var sunday_pros = Pros{
+var sunday_iom_pros = Pros{
 	Names: []string{
 		"Chris Chatfield",
 		"Phil Scapens",
@@ -49,6 +49,47 @@ var sunday_pros = Pros{
 		"Greg Peake",
 		"Alex Scapens",
 		"Ruth Williams",
+	},
+}
+
+var sunday_rm_pros = Pros{
+	Names: []string{
+		"Tim Paynter",
+		"Alan Carli",
+		"John Gratton",
+		"Daryle Bampton",
+		"Tim Arland",
+		"John Inverarity",
+		"Ecio Marcel",
+		"Ian Dowsett",
+		"Alan Gold",
+		"Chris Juttner",
+		"Simon How",
+	},
+}
+
+var sunday_10r_pros = Pros{
+	Names: []string{
+		"Alan Carli",
+		"John Gratton",
+		"Daryle Bampton",
+		"Tim Arland",
+		"John Brolese",
+		"Chris Juttner",
+		"Steve Arthur",
+		"Greg Peake",
+	},
+}
+
+var sunday_aclass_pros = Pros{
+	Names: []string{
+		"Alan Carli",
+		"Daryle Bampton",
+		"Tim Arland",
+		"Alan Gold",
+		"Chris Juttner",
+		"Steve Arthur",
+		"Greg Peake",
 	},
 }
 

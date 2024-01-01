@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strings"
 	"time"
 )
 
@@ -32,6 +34,9 @@ func Create() ([]Event, error) {
 			}
 		}
 		if event, exist := GetEvent(non_saryc_sailing_days, date); exist {
+			if strings.Contains(events[len(events)-1].Event, "Club Championship") {
+				log.Fatalf("%s collides with %s", events[len(events)-1].Event, event.Event)
+			}
 			events = append(events, event)
 		}
 	}
@@ -45,46 +50,46 @@ func sunday(date time.Time) (event Event) {
 	firstRace := firstRace(date)
 
 	if date.Month() == time.February && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #1", "Tim Arland", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #1", "Tim Arland", firstRace}
 	} else if date.Month() == time.April && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #2", "Daryle Bampton", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #2", "Daryle Bampton", firstRace}
 	} else if date.Month() == time.June && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #3", "Simon How", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #3", "Simon How", firstRace}
 	} else if date.Month() == time.August && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #4", "John Brolese", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #4", "John Brolese", firstRace}
 	} else if date.Month() == time.October && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #5", "John Brolese", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #5", "John Brolese", firstRace}
 	} else if date.Month() == time.December && firstWeek(date) {
-		event = Event{date, "IOM RM 10R A-Class", "Rutgers #6", "Johan Bergkvist", firstRace}
+		event = Event{date, "IOM RM 10R A-Class Laser", "Rutgers #6", "Johan Bergkvist", firstRace}
 	} else {
 		//
 		// IOM Club championships
 		//
-		if sundayClass == IOM && date.Month() == time.January {
+		if sundayClass == IOM && date.Month() == time.February {
 			event = Event{date, "IOM", "Club Championship #1", "Ecio Marcel", firstRace}
-		} else if sundayClass == IOM && date.Month() == time.April {
-			event = Event{date, "IOM", "Club Championship #2", "Tim Paynter", firstRace}
 		} else if sundayClass == IOM && date.Month() == time.May {
-			event = Event{date, "IOM", "Club Championship #3", "Phil Scapens", firstRace}
+			event = Event{date, "IOM", "Club Championship #2", "Tim Paynter", firstRace}
 		} else if sundayClass == IOM && date.Month() == time.August {
+			event = Event{date, "IOM", "Club Championship #3", "Phil Scapens", firstRace}
+		} else if sundayClass == IOM && date.Month() == time.October {
 			event = Event{date, "IOM", "Club Championship #4", "Danny James", firstRace}
 			//
 			// RM Club championships
 			//
 		} else if sundayClass == RM && date.Month() == time.February {
 			event = Event{date, "RM", "Club Championship #1", "Ian Dowsett", firstRace}
-		} else if sundayClass == RM && date.Month() == time.July {
+		} else if sundayClass == RM && date.Month() == time.April {
 			event = Event{date, "RM", "Club Championship #2", "Alan Carli", firstRace}
-		} else if sundayClass == RM && date.Month() == time.August {
+		} else if sundayClass == RM && date.Month() == time.July {
 			event = Event{date, "RM", "Club Championship #3", "Chris Juttner", firstRace}
-		} else if sundayClass == RM && date.Month() == time.November {
+		} else if sundayClass == RM && date.Month() == time.October {
 			event = Event{date, "RM", "Club Championship #4", "Danny James", firstRace}
 			//
 			// 10R Club championships
 			//
-		} else if sundayClass == TenRater && date.Month() == time.February {
-			event = Event{date, "10R", "Club Championship #1", "Tim Arland", firstRace}
 		} else if sundayClass == TenRater && date.Month() == time.April {
+			event = Event{date, "10R", "Club Championship #1", "Tim Arland", firstRace}
+		} else if sundayClass == TenRater && date.Month() == time.May {
 			event = Event{date, "10R", "Club Championship #2", "Greg Peake", firstRace}
 		} else if sundayClass == TenRater && date.Month() == time.July {
 			event = Event{date, "10R", "Club Championship #3", "Steve Arthur", firstRace}
@@ -93,16 +98,27 @@ func sunday(date time.Time) (event Event) {
 			//
 			// A-Class Club championships
 			//
-		} else if sundayClass == AClass && date.Month() == time.February {
+		} else if sundayClass == AClass && date.Month() == time.January {
 			event = Event{date, "A-Class", "Club Championship #1", "Alan Gold", firstRace}
 		} else if sundayClass == AClass && date.Month() == time.March {
 			event = Event{date, "A-Class", "Club Championship #2", "Chris Juttner", firstRace}
 		} else if sundayClass == AClass && date.Month() == time.June {
 			event = Event{date, "A-Class", "Club Championship #3", "Alan Carli", firstRace}
-		} else if sundayClass == AClass && date.Month() == time.October {
+		} else if sundayClass == AClass && date.Month() == time.November {
 			event = Event{date, "A-Class", "Club Championship #4", "Tim Arland", firstRace}
 		} else {
-			event = Event{date, sundayClass.ToString(), sundayClass.ToString() + " Scored Racing", sunday_pros.Next(), firstRace}
+			var pros *Pros
+			switch sundayClass {
+			case IOM:
+				pros = &sunday_iom_pros
+			case RM:
+				pros = &sunday_rm_pros
+			case TenRater:
+				pros = &sunday_10r_pros
+			case AClass:
+				pros = &sunday_aclass_pros
+			}
+			event = Event{date, sundayClass.ToString(), sundayClass.ToString() + " Scored Racing", pros.Next(), firstRace}
 		}
 
 		sundayClass.Next()
@@ -113,7 +129,7 @@ func sunday(date time.Time) (event Event) {
 func tuesday(date time.Time) Event {
 	if secondWeek((date)) {
 		return Event{date, "IOM", fmt.Sprintf("Gold Cup #%d", int(date.Month())), tuesday_pros.Next(), "10am"}
-	} else if thirdWeek(date) {
+	} else if fourthWeek(date) {
 		return Event{date, "IOM", fmt.Sprintf("Trevor Jeffries #%d", int(date.Month())), tuesday_pros.Next(), "10am"}
 	} else {
 		return Event{date, "IOM", "Scored Racing", tuesday_pros.Next(), "10am"}

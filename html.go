@@ -95,6 +95,7 @@ th {
 <h1 style="text-align:center">SARYC 2024 Sailing Program, {{.Title}}</h1>
 <p style="text-align:center">Generated on <strong>{{.Date}}</strong></p></body>
 <p>The PRO of the day is responsible for the key to the shed and for laying the course. The PRO should enlist other skippers to help.
+<p>Non dual-rated RM may sail in all 10R events except ranking events.
 <p><a href="NoR.pdf">Notice of Race</a>
 </p>
 <table>
