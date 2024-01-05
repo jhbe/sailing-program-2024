@@ -129,7 +129,8 @@ func sunday(date time.Time) (event Event) {
 func tuesday(date time.Time) Event {
 	if secondWeek((date)) {
 		return Event{date, "IOM", fmt.Sprintf("Gold Cup #%d", int(date.Month())), tuesday_pros.Next(), "10am"}
-	} else if fourthWeek(date) {
+	} else if (date.Month() < 12 && fourthWeek(date)) || (date.Month() == 12 && thirdWeek(date)) {
+		// The fourth Tuesday of every month, except December (due to Christmas Eve).
 		return Event{date, "IOM", fmt.Sprintf("Trevor Jeffries #%d", int(date.Month())), tuesday_pros.Next(), "10am"}
 	} else {
 		return Event{date, "IOM", "Scored Racing", tuesday_pros.Next(), "10am"}
@@ -145,7 +146,7 @@ func wednesday(date time.Time) Event {
 }
 
 func firstRace(date time.Time) string {
-	if date.Weekday() == time.Sunday && date.Month() < 4 {
+	if date.Weekday() == time.Sunday && (date.Month() <= 3 || date.Month() >= 10) {
 		return "11am"
 	} else {
 		return "10am"
@@ -166,4 +167,8 @@ func thirdWeek(date time.Time) bool {
 
 func fourthWeek(date time.Time) bool {
 	return date.Day() >= 22 && date.Day() < 29
+}
+
+func fifthWeek(date time.Time) bool {
+	return date.Day() >= 29
 }

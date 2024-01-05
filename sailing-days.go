@@ -17,7 +17,8 @@ var no_sailing_days = []Event{
 	{time.Date(2024, 3, 31, 0, 0, 0, 0, time.Local), "", "Easter Sunday", "", ""},
 	{time.Date(2024, 5, 12, 0, 0, 0, 0, time.Local), "", "Mothers Day", "", ""},
 	{time.Date(2024, 9, 1, 0, 0, 0, 0, time.Local), "", "Fathers Day", "", ""},
-	// {time.Date(2024, 12, 24, 0, 0, 0, 0, time.Local), "", "Christmas Eve", "", ""},
+	{time.Date(2024, 12, 24, 0, 0, 0, 0, time.Local), "", "Christmas Eve", "", ""},
+	{time.Date(2024, 12, 25, 0, 0, 0, 0, time.Local), "", "Christmas Day", "", ""},
 	// {time.Date(2024, 12, 31, 0, 0, 0, 0, time.Local), "", "New Years Eve", "", ""},
 }
 
