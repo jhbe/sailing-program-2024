@@ -4,10 +4,9 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
-	"time"
 )
 
-func GenerateHtml(events []Event, destDir string) error {
+func GenerateHtml(events []Event, htmlDir, now string) error {
 	pages := []struct {
 		title    string
 		fileName string
@@ -31,25 +30,19 @@ func GenerateHtml(events []Event, destDir string) error {
 		{"A Class on Sundays", "aclass_sunday", func(e Event) bool { return e.IsAClass() && e.IsSunday() }},
 	}
 
-	if err := GenerateTOC(destDir); err != nil {
+	if err := GenerateTOC(htmlDir); err != nil {
 		return err
 	}
 	for _, page := range pages {
-		if err := Generate(events, page.title, filepath.Join(destDir, page.fileName+".html"), page.filter); err != nil {
+		if err := GenerateOneHtml(events, page.title, filepath.Join(htmlDir, page.fileName), now, page.filter); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func Generate(events []Event, title, fileName string, filter func(Event) bool) error {
-	f, err := os.Create(fileName)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	lines := make([]Line, 0)
+func GenerateOneHtml(events []Event, title, htmlFileName, now string, filter func(Event) bool) error {
+	lines := make([]Line, 0, len(events))
 	month := events[0].Date.Month()
 	for _, event := range events {
 		if filter(event) {
@@ -57,8 +50,15 @@ func Generate(events []Event, title, fileName string, filter func(Event) bool) e
 			month = event.Date.Month()
 		}
 	}
-	page := Page{title, lines, time.Now().Format("15:04:05 Mon, 2 Jan 2006")}
-	return template.Must(template.New("Template").Parse(templ)).Execute(f, page)
+
+	htmlFile, err := os.Create(htmlFileName + ".html")
+	if err != nil {
+		return err
+	}
+	defer htmlFile.Close()
+
+	page := Page{title, lines, now}
+	return template.Must(template.New("Html Template").Parse(htmlTempl)).Execute(htmlFile, page)
 }
 
 type Page struct {
@@ -76,7 +76,7 @@ type Line struct {
 	FirstRace string
 }
 
-var templ = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+var htmlTempl = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
